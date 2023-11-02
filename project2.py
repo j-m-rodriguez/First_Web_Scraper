@@ -8,19 +8,19 @@ soup = BeautifulSoup(r.text, 'html.parser')
 
 first_book = soup.find(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3")
 # prints the html of the first product
-# for child in first_book.children:
+#for child in first_book.children:
 #    print(child)
 
-# string of the element with the book link
-fb_link = str(first_book.find("h3"))
-print(fb_link)
+# string of the location of the book link
+book_link = str(first_book.find("h3"))
+print(book_link)
 
-# list of the element with book link
-fb_list = fb_link.split('"')
+# list containing the product link
+fb_list = book_link.split('"')
 # print(fb_list)
 
 # variable of product url
-product_page_url = "https://books.toscrape.com/" + fb_list[1]
+product_page_url = main_url + fb_list[1]
 print(product_page_url)
 
 # variable of product title
@@ -31,10 +31,13 @@ print(book_title)
 r_book = requests.get(product_page_url)
 book_soup = BeautifulSoup(r_book.text, 'html.parser')
 
+# another method to get product info (change first index to match list item, however this doesn't take care of the 'Â'
+#print(book_soup.find_all('td')[0].contents[0])
+#print(book_soup.find_all('td')[2].contents[0])
+
 # string of product info
 product_table = str(book_soup.find_all('td'))
 #print(product_table)
-
 # list of product info
 product_values = re.split(r',| |\(|\)|\[|]|Â|<.+?>', product_table)
 product_values = list(filter(None, product_values))
@@ -50,30 +53,10 @@ print(price_including_tax)
 quantity_available = product_values[7]
 print(quantity_available)
 
-# trying to get description from 'meta'
-'''
-print(book_soup.find_all('meta'))
-print('line 54')
-for line in book_soup.find_all('meta'):
-    print(line)
-print(book_soup.find('meta').string)
-'''
-# get product description from class="product_page"
-for child in book_soup.find_all('p', class_="product_page").children:
-    print(child)
-#    print(child)
-#    if child.string is None or len(child.string) < 25:
-#        continue
-#    else:
-#        product_description = child.string
-#print(product_description)
-#another way to find product description
-des = book_soup.find(class_="product_page").find_all('p')[3]
-print(des)
-# path to description
-#/html/body/div/div/div[2]/div[2]/article/p
-product_description2 = book_soup.article.contents[7].contents[0]
-print(product_description2)
+
+# get product description
+product_description = book_soup.article.contents[7].contents[0]
+print(product_description)
 
 # get category by navigating down contents of <ul> tree
 category = book_soup.ul.contents[5].contents[1].contents[0]
