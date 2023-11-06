@@ -6,13 +6,13 @@ main_url = "https://books.toscrape.com/"
 r = requests.get(main_url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
-first_book = soup.find(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3")
+product_link = soup.find(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3")
 # prints the html of the first product
-#for child in first_book.children:
+#for child in product_link.children:
 #    print(child)
 
 # string of the location of the book link
-book_link = str(first_book.find("h3"))
+book_link = str(product_link.find("h3"))
 print(book_link)
 
 # list containing the product link
