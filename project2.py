@@ -6,10 +6,14 @@ main_url = "https://books.toscrape.com/"
 r = requests.get(main_url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
-# loops through each product by the class and retrieves product link
+# loops through each product by the class and retrieves product link, title, and img url,
 for link in soup.find_all(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3"):
     product_page_url = main_url + link.a['href']
     print(product_page_url)
+    book_title = link.img['alt']
+    print(book_title)
+    image_url = main_url + link.img['src']
+    print(image_url)
     r_product = requests.get(product_page_url)
     product_soup = BeautifulSoup(r_product.text, 'html.parser')
 # string of product info
@@ -36,8 +40,3 @@ for link in soup.find_all(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3"):
     rating_location = product_soup.find(class_="star-rating")
     review_rating = rating_location['class'][1]
     print(review_rating)
-# locate and print image url
-    img_location = str((product_soup.find(class_="item active").contents[1]))
-    img = re.split(r'(media.*jpg)', img_location)
-    image_url = main_url + img[1]
-    print(image_url)

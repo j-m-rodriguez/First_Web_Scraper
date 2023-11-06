@@ -22,3 +22,9 @@ book_soup = BeautifulSoup(r_book.text, 'html.parser')
 img_location = str((book_soup.find(class_="item active").contents[1]))
 img = re.split(r'(media.*jpg)', img_location)
 print(main_url + img[1])
+
+for link in soup.find_all(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3"):
+    print(main_url + link.img['src'])
+    print(link.img['alt'])
+    product_page_url = main_url + link.a['href']
+    print(product_page_url)
