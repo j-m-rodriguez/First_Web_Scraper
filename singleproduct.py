@@ -8,9 +8,6 @@ r = requests.get(main_url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
 product_link = soup.find(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3")
-# prints the html of the first product
-#for child in product_link.children:
-#    print(child)
 
 # string of the location of the book link
 book_link = str(product_link.find("h3"))
@@ -30,28 +27,20 @@ print(book_title)
 
 # soup of the first product
 r_book = requests.get(product_page_url)
-book_soup = BeautifulSoup(r_book.text, 'html.parser')
+book_soup = BeautifulSoup(r_book.text.encode('latin1').decode('utf-8'), 'html.parser')
 
 # another method to get product info (change first index to match list item, however this doesn't take care of the 'Â'
-#print(book_soup.find_all('td')[0].contents[0])
-#print(book_soup.find_all('td')[2].contents[0])
-
-# string of product info
-product_table = str(book_soup.find_all('td'))
-#print(product_table)
-# list of product info
-product_values = re.split(r',| |\(|\)|\[|]|Â|<.+?>', product_table)
-product_values = list(filter(None, product_values))
+product_values = book_soup.find_all('td')
 print(product_values)
 
 # product upc, prices, and quantity
-universal_product_code = product_values[0]
+universal_product_code = product_values[0].contents[0]
 print(universal_product_code)
-price_excluding_tax = product_values[2]
+price_excluding_tax = product_values[2].contents[0]
 print(price_excluding_tax)
-price_including_tax = product_values[3]
+price_including_tax = product_values[3].contents[0]
 print(price_including_tax)
-quantity_available = product_values[7]
+quantity_available = product_values[5].contents[0]
 print(quantity_available)
 
 
@@ -99,7 +88,7 @@ for each in header:
     i += 1
 print(header_product)
 
-with open('single_product.csv', mode='a') as csv_file:
+with open('single_product.csv', mode='w', newline='') as csv_file:
     writer = csv.DictWriter(csv_file, fieldnames=header)
     writer.writeheader()
     writer.writerow(header_product)
