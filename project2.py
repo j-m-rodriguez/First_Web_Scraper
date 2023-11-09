@@ -80,10 +80,11 @@ while True:
         rating_location = product_soup.find(class_="star-rating")
         review_rating = rating_location['class'][1]
         print(review_rating)
-    next_page = main_url + "catalogue/" + soup.find(class_="next").a['href']
-    print(next_page)
+    try:
+        next_page = main_url + "catalogue/" + soup.find(class_="next").a['href']
+        print(next_page)
+    except:
+        break
     r = requests.get(next_page)
-    print('requests ok')
     soup = BeautifulSoup(r.text, 'html.parser')
-    print('soup ok')
 print('done')
