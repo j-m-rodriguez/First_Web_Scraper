@@ -8,10 +8,11 @@ r = requests.get(main_url)
 soup = BeautifulSoup(r.text, 'html.parser')
 
 first_category = soup.find(class_="nav nav-list").ul.a['href']
+print(first_category)
 category_link = main_url + first_category
 print(category_link)
 r_category = requests.get(category_link)
-soup_category = BeautifulSoup(r_category.text, 'html.parser')
+soup_category = BeautifulSoup(r_category.text.encode('latin1').decode('utf-8'), 'html.parser')
 # headers for CSV file
 header = ['product_page_url', 'universal_product_code',
           'book_title', 'price_including_tax',
@@ -31,30 +32,26 @@ while True:
         product_page_url = main_url + "catalogue/" + product_section[0]
         print(product_page_url)
         book_title = link.img['alt']
-        book_title = re.sub(r"â\S+", "'", book_title)
         print(book_title)
         image_url = main_url + link.img['src']
         print(image_url)
         r_product = requests.get(product_page_url)
-        product_soup = BeautifulSoup(r_product.text, 'html.parser')
-    # string of product info
-        product_table = str(product_soup.find_all('td'))
-    # list of product info
-        product_values = re.split(r',| |\(|\)|\[|]|Â|<.+?>', product_table)
-        product_values = list(filter(None, product_values))
+        product_soup = BeautifulSoup(r_product.text.encode('latin1').decode('utf-8'), 'html.parser')
+    # product info table
+        product_values = product_soup.find_all('td')
         print(product_values)
+
     # product upc, prices, and quantity
-        universal_product_code = product_values[0]
+        universal_product_code = product_values[0].contents[0]
         print(universal_product_code)
-        price_including_tax = product_values[3]
-        print(price_including_tax)
-        price_excluding_tax = product_values[2]
+        price_excluding_tax = product_values[2].contents[0]
         print(price_excluding_tax)
-        quantity_available = product_values[7]
+        price_including_tax = product_values[3].contents[0]
+        print(price_including_tax)
+        quantity_available = product_values[5].contents[0]
         print(quantity_available)
     # get product description
         product_description = product_soup.article.contents[7].contents[0]
-        product_description = re.sub("â..", r"'", product_description)
         print(product_description)
     # get category by navigating down contents of <ul> tree
         category = product_soup.ul.contents[5].contents[1].contents[0]
@@ -90,7 +87,7 @@ while True:
         next_page = re.sub(r"/.*?\.html", "/", category_link) + soup_category.find(class_="next").a['href']
         print(next_page)
         r = requests.get(next_page)
-        soup_category = BeautifulSoup(r.text, 'html.parser')
+        soup_category = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
     except Exception:
         break
 csv_file.close()
