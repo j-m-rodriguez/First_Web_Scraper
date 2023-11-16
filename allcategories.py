@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import csv
 import re
+import os
 
 main_url = "https://books.toscrape.com/"
 main_r = requests.get(main_url)
@@ -13,6 +14,10 @@ header = ['product_page_url', 'universal_product_code',
           'product_description', 'category',
           'review_rating', 'image_url'
           ]
+# setting up directory
+path = 'C:\\OpenClassrooms\\SecondProject\\Rodriguez_Jonathan_2_data_images_112023\\'
+if not os.path.exists(path):
+    os.makedirs(path)
 # contains all <li> elements with category and category book
 category_links = main_soup.find(class_="nav nav-list").ul
 for link in category_links.find_all('a'):
@@ -27,7 +32,7 @@ for link in category_links.find_all('a'):
     soup = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
 
     # set up csv for each category
-    csv_file = category + ".csv"
+    csv_file = path + category + ".csv"
     f = open(csv_file, 'w', newline='')
     writer = csv.DictWriter(f, fieldnames=header)
     writer.writeheader()
@@ -84,10 +89,14 @@ for link in category_links.find_all('a'):
             # dictionary of everything
             header_product = {header[i]: product[i] for i in range(len(header))}
             print(header_product)
-
-            f = open(csv_file, 'a', newline='')
-            writer = csv.DictWriter(f, fieldnames=header)
-            writer.writerow(header_product)
+            try:
+                f = open(csv_file, 'a', newline='')
+                writer = csv.DictWriter(f, fieldnames=header)
+                writer.writerow(header_product)
+            except UnicodeEncodeError:
+                f = open(csv_file, 'a', newline='', encoding='utf-16')
+                writer = csv.DictWriter(f, fieldnames=header)
+                writer.writerow(header_product)
         try:
             next_page = re.sub(r"/.*?\.html", "/", category_url) + soup.find(class_="next").a['href']
             print(next_page)
