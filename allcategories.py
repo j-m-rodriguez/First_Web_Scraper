@@ -14,12 +14,13 @@ header = ['product_page_url', 'universal_product_code',
           'product_description', 'category',
           'review_rating', 'image_url'
           ]
-# setting up directory
+# setting up directory for CSV files and images
 path = 'C:\\OpenClassrooms\\SecondProject\\Rodriguez_Jonathan_2_data_images_112023\\'
 if not os.path.exists(path):
     os.makedirs(path)
 # contains all <li> elements with category and category book
 category_links = main_soup.find(class_="nav nav-list").ul
+# outer loop that goes through all categories
 for link in category_links.find_all('a'):
     # obtain url for the category
     category_url = main_url + link['href']
@@ -27,6 +28,9 @@ for link in category_links.find_all('a'):
     # obtain category name
     category = ' '.join(list(filter(None, re.split(r'\s|\\n', link.contents[0]))))
     print(category)
+    image_dir = path + "images\\" + category + "\\"
+    if not os.path.exists(image_dir):
+        os.makedirs(image_dir)
     r = requests.get(category_url)
     # soup of category page
     soup = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
@@ -36,6 +40,9 @@ for link in category_links.find_all('a'):
     f = open(csv_file, 'w', newline='')
     writer = csv.DictWriter(f, fieldnames=header)
     writer.writeheader()
+
+    # variable for image naming
+    i = 0
     while True:
         for book in soup.find_all(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3"):
             product_section = list(filter(None, re.split(r'\.\./', book.a['href'])))
@@ -45,6 +52,10 @@ for link in category_links.find_all('a'):
             print(book_title)
             image_url = main_url + book.img['src']
             print(image_url)
+            img_data = requests.get(image_url).content
+            with open(image_dir + 'image_' + str(i) + '.jpg', 'wb') as handler:
+                handler.write(img_data)
+            i += 1
             r_product = requests.get(product_page_url)
             product_soup = BeautifulSoup(r_product.text.encode('latin1').decode('utf-8'), 'html.parser')
             # product info table
