@@ -28,6 +28,11 @@ for link in category_links.find_all('a'):
     # obtain category name
     category = ' '.join(list(filter(None, re.split(r'\s|\\n', link.contents[0]))))
     print(category)
+    # csv file directory
+    csv_dir = path + "data\\"
+    if not os.path.exists(csv_dir):
+        os.makedirs(csv_dir)
+    # image file directory
     image_dir = path + "images\\" + category + "\\"
     if not os.path.exists(image_dir):
         os.makedirs(image_dir)
@@ -36,7 +41,7 @@ for link in category_links.find_all('a'):
     soup = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
 
     # set up csv for each category
-    csv_file = path + category + ".csv"
+    csv_file = csv_dir + category + ".csv"
     f = open(csv_file, 'w', newline='')
     writer = csv.DictWriter(f, fieldnames=header)
     writer.writeheader()
