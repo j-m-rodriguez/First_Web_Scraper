@@ -15,9 +15,11 @@ header = ['product_page_url', 'universal_product_code',
           'review_rating', 'image_url'
           ]
 # setting up directory for CSV files and images
-path = 'C:\\OpenClassrooms\\SecondProject\\Rodriguez_Jonathan_2_data_images_112023\\'
-if not os.path.exists(path):
-    os.makedirs(path)
+absolute_path = os.path.dirname(__file__)
+relative_path = "Rodriguez_Jonathan_2_data_images_112023"
+full_path = os.path.join(absolute_path, relative_path)
+if not os.path.exists(full_path):
+    os.makedirs(full_path)
 # contains all <li> elements with category and category book
 category_links = main_soup.find(class_="nav nav-list").ul
 # outer loop that goes through all categories
@@ -29,11 +31,11 @@ for link in category_links.find_all('a'):
     category = ' '.join(list(filter(None, re.split(r'\s|\\n', link.contents[0]))))
     print(category)
     # csv file directory
-    csv_dir = path + "data\\"
+    csv_dir = os.path.join(full_path, "data") + "\\"
     if not os.path.exists(csv_dir):
         os.makedirs(csv_dir)
     # image file directory
-    image_dir = path + "images\\" + category + "\\"
+    image_dir = os.path.join(full_path, "images", category) + "\\"
     if not os.path.exists(image_dir):
         os.makedirs(image_dir)
     r = requests.get(category_url)
