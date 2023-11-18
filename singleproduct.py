@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 import requests
-import re
 import csv
 
 main_url = "https://books.toscrape.com/"
@@ -9,11 +8,11 @@ soup = BeautifulSoup(r.text, 'html.parser')
 
 product_link = soup.find(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3")
 
-# string of the location of the book link
+# string of the location of the book
 book_link = str(product_link.find("h3"))
 print(book_link)
 
-# list containing the product link
+# list containing the product book
 fb_list = book_link.split('"')
 # print(fb_list)
 
