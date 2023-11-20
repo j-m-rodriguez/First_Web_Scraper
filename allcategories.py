@@ -84,13 +84,13 @@ for link in category_links.find_all('a'):
                 handler.write(img_data)
             i += 1
 
-            writer = csv.DictWriter(f, fieldnames=header)
             try:
                 f = open(csv_file, 'a', newline='')
+                writer = csv.DictWriter(f, fieldnames=header)
                 writer.writerow(product_info)
-
             except UnicodeEncodeError:
                 f = open(csv_file, 'a', newline='', encoding='utf-16')
+                writer = csv.DictWriter(f, fieldnames=header)
                 writer.writerow(product_info)
 
         try:
