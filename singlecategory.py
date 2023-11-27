@@ -20,6 +20,7 @@ header = ['product_page_url', 'universal_product_code',
           'product_description', 'category',
           'review_rating', 'image_url'
           ]
+product_info = {}
 # open CSV file and write headers
 f = open('single_category.csv', 'w')
 for each in header:
@@ -30,59 +31,31 @@ while True:
     for link in soup_category.find_all(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3"):
         product_section = list(filter(None, re.split(r'\.\./', link.a['href'])))
         product_page_url = main_url + "catalogue/" + product_section[0]
-        print(product_page_url)
-        book_title = link.img['alt']
-        print(book_title)
+        product_info['product_page_url'] = product_page_url
+        product_info['book_title'] = link.img['alt']
         image_url = main_url + link.img['src']
-        print(image_url)
+        product_info['image_url'] = image_url
         r_product = requests.get(product_page_url)
         product_soup = BeautifulSoup(r_product.text.encode('latin1').decode('utf-8'), 'html.parser')
     # product info table
         product_values = product_soup.find_all('td')
-        print(product_values)
 
     # product upc, prices, and quantity
-        universal_product_code = product_values[0].contents[0]
-        print(universal_product_code)
-        price_excluding_tax = product_values[2].contents[0]
-        print(price_excluding_tax)
-        price_including_tax = product_values[3].contents[0]
-        print(price_including_tax)
-        quantity_available = product_values[5].contents[0]
-        print(quantity_available)
+        product_info['universal_product_code'] = product_values[0].contents[0]
+        product_info['price_excluding_tax'] = product_values[2].contents[0]
+        product_info['price_including_tax'] = product_values[3].contents[0]
+        product_info['quantity_available'] = product_values[5].contents[0]
     # get product description
-        product_description = product_soup.article.contents[7].contents[0]
-        print(product_description)
+        product_info['product_description'] = product_soup.article.contents[7].contents[0]
     # get category by navigating down contents of <ul> tree
-        category = product_soup.ul.contents[5].contents[1].contents[0]
-        print(category)
+        product_info['category'] = product_soup.ul.contents[5].contents[1].contents[0]
     # locate and print review rating
         rating_location = product_soup.find(class_="star-rating")
-        review_rating = rating_location['class'][1]
-        print(review_rating)
-    # create list of all product details
-        product = list()
-        product.append(product_page_url)
-        product.append(universal_product_code)
-        product.append(book_title)
-        product.append(price_including_tax)
-        product.append(price_excluding_tax)
-        product.append(quantity_available)
-        product.append(product_description)
-        product.append(category)
-        product.append(review_rating)
-        product.append(image_url)
-        print(product)
-    # dictionary of everything
-        header_product = {}
-        i = 0
-        for each in header:
-            header_product[each] = product[i]
-            i += 1
-        print(header_product)
+        product_info['review_rating'] = rating_location['class'][1]
+
         csv_file = open('single_category.csv', 'a', newline='')
         writer = csv.DictWriter(csv_file, fieldnames=header)
-        writer.writerow(header_product)
+        writer.writerow(product_info)
     try:
         next_page = re.sub(r"/.*?\.html", "/", category_link) + soup_category.find(class_="next").a['href']
         print(next_page)
@@ -90,4 +63,4 @@ while True:
         soup_category = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
     except Exception:
         break
-csv_file.close()
+
