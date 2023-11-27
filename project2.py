@@ -18,7 +18,9 @@ for link in soup.find_all(class_="col-xs-6 col-sm-4 col-md-3 col-lg-3"):
     r_product = requests.get(product_page_url)
     product_soup = BeautifulSoup(r_product.text, 'html.parser')
 # string of product info
-    product_table = str(product_soup.find_all('td'))
+    product_table = (product_soup.find_all('td'))
+    print(product_table)
+    print(str(product_table))
 # list of product info
     product_values = re.split(r',| |\(|\)|\[|]|Â|<.+?>', product_table)
     product_values = list(filter(None, product_values))
