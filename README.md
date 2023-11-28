@@ -6,9 +6,11 @@ Instructions:
     $ python3 -m venv env
    
    $ env/scripts/activate
-4. Use the command below to install the packages according to the configuration file requirements.txt.
+3. Use the command below to install the packages according to the configuration file requirements.txt.
 
     $ pip install -r requirements.txt
-6. Run the file allcategories.py to download product data in CSV format and product images.
+4. Open and run the file allcategories.py to download product data in CSV format and product images.
  
-   $  python .\allcategories.py
+   $  .\allcategories.py
+
+   *Note: running this file in the terminal may cause a connection timeout due to the length it takes to process all 1,000 product.
