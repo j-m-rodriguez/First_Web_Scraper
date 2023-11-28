@@ -77,11 +77,13 @@ for link in category_links.find_all('a'):
             rating_location = product_soup.find(class_="star-rating")
             product_info['review_rating'] = rating_location['class'][1]
 
+            # download all images
             img_data = requests.get(image_url).content
             with open(image_dir + 'image_' + str(i) + '.jpg', 'wb') as handler:
                 handler.write(img_data)
             i += 1
 
+            # write product information to csv file, use a different charset in case of error
             try:
                 f = open(csv_file, 'a', newline='')
                 writer = csv.DictWriter(f, fieldnames=header)
@@ -91,6 +93,7 @@ for link in category_links.find_all('a'):
                 writer = csv.DictWriter(f, fieldnames=header)
                 writer.writerow(product_info)
 
+        # search for possible next page and create a new soup if there is
         try:
             next_page = re.sub(r"[a-z]*?\.html", soup.find(class_="next").a['href'], category_url)
             r = requests.get(next_page)
