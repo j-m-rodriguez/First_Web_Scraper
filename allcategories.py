@@ -73,11 +73,9 @@ for link in category_links.find_all('a'):
             # get product description
             product_info['product_description'] = product_soup.article.contents[7].contents[0]
 
-            # locate and print review rating
+            # locate review rating
             rating_location = product_soup.find(class_="star-rating")
             product_info['review_rating'] = rating_location['class'][1]
-
-            print(product_info)
 
             img_data = requests.get(image_url).content
             with open(image_dir + 'image_' + str(i) + '.jpg', 'wb') as handler:
