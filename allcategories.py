@@ -94,9 +94,10 @@ for link in category_links.find_all('a'):
                 writer.writerow(product_info)
 
         # search for possible next page and create a new soup if there is
+        # try:
         try:
             next_page = re.sub(r"[a-z]*?\.html", soup.find(class_="next").a['href'], category_url)
-            r = requests.get(next_page)
-            soup = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
         except AttributeError:
             break
+        r = requests.get(next_page)
+        soup = BeautifulSoup(r.text.encode('latin1').decode('utf-8'), 'html.parser')
