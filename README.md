@@ -11,7 +11,7 @@ Instructions for Mac:
     $ python -m pip install requirements.txt
 4. Open and run the file allcategories.py to download product data in CSV format and product images.
  
-   $  .\allcategories.py
+   $  python allcategories.py
    
 
 Instructions for Windows:
