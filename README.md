@@ -12,6 +12,7 @@ Instructions for Mac:
 4. Open and run the file allcategories.py to download product data in CSV format and product images.
  
    $  .\allcategories.py
+   
 
 Instructions for Windows:
 1. Download files from this repository.
