@@ -3,7 +3,7 @@ Instructions for Mac:
 1. Download files from this repository.
 2. Using these terminal commands, create and activate a virtual environment.
 
-    $ python3 -m venv env
+    $ python -m venv env
    
    $ source env/bin/activate
 3. Use the command below to install the packages according to the configuration file requirements.txt.
@@ -18,7 +18,7 @@ Instructions for Windows:
 1. Download files from this repository.
 2. Using these terminal commands, create and activate a virtual environment.
 
-    $ python3 -m venv env
+    $ python -m venv env
    
    $ env/scripts/activate
 3. Use the command below to install the packages according to the configuration file requirements.txt.
