@@ -1,5 +1,19 @@
 # OpenClassrooms_Project2
-Instructions:
+Instructions for Mac:
+1. Download files from this repository.
+2. Using these terminal commands, create and activate a virtual environment.
+
+    $ python3 -m venv env
+   
+   $ source env/bin/activate
+3. Use the command below to install the packages according to the configuration file requirements.txt.
+
+    $ python -m pip install requirements.txt
+4. Open and run the file allcategories.py to download product data in CSV format and product images.
+ 
+   $  .\allcategories.py
+
+Instructions for Windows:
 1. Download files from this repository.
 2. Using these terminal commands, create and activate a virtual environment.
 
