@@ -14,7 +14,7 @@ Instructions for Mac:
    $ source env/bin/activate
 4. Use the command below to install the packages according to the configuration file requirements.txt.
 
-    $ python -m pip install requirements.txt
+    $ python3 -m pip install -r requirements.txt
 5. Open and run the file allcategories.py to download product data in CSV format and product images.
  
    $  python allcategories.py
