@@ -1,4 +1,4 @@
-# OpenClassrooms_Project2
+# First_Web_Scraper
 Instructions for Mac:
 1. Download files from this repository or create a clone using the code below.
 
